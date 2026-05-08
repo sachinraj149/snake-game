@@ -28,7 +28,7 @@ window.setDir = function(newDir) {
 }
 
 function draw() {
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#111";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     for (let i = 0; i < snake.length; i++) {
@@ -49,10 +49,10 @@ function draw() {
     if (d === "RIGHT") snakeX += box;
     if (d === "DOWN") snakeY += box;
 
-    // Fix: Strict equality check and direct score update
+    // Score Logic Fix
     if (snakeX === food.x && snakeY === food.y) {
         score++;
-        scoreElement.textContent = score; 
+        if(scoreElement) scoreElement.innerText = score; 
         food = {
             x: Math.floor(Math.random() * 19 + 1) * box,
             y: Math.floor(Math.random() * 19 + 1) * box
@@ -65,7 +65,7 @@ function draw() {
 
     if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
         clearInterval(game);
-        alert("Game Over! Your Score: " + score);
+        alert("Game Over! Score: " + score);
         location.reload(); 
     }
 
