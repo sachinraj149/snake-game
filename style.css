@@ -1,64 +1,26 @@
 body {
     background-color: #1a1a1a;
-    color: #00ff41; /* Matrix green color */
+    color: #00ff41;
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0;
-    padding: 20px;
-}
-
-h1 {
-    text-shadow: 0 0 10px #00ff41;
-    letter-spacing: 5px;
+    padding: 10px;
+    /* Screen scroll rokne ke liye */
+    height: 100vh;
+    overflow: hidden; 
+    touch-action: none; /* Mobile par swipe scroll rokne ke liye */
 }
 
 .game-container {
     position: relative;
-    border: 5px solid #333;
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-    border-radius: 8px;
-    overflow: hidden;
+    border: 3px solid #333;
+    margin-top: 5px;
 }
 
 canvas {
     background-color: #000;
-    display: block;
-}
-
-.stats {
-    margin-bottom: 10px;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-/* Mobile Controls Styling */
-.controls {
-    display: grid;
-    grid-template-areas: 
-        ". up ."
-        "left . right"
-        ". down .";
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.btn {
-    width: 60px;
-    height: 60px;
-    background: #333;
-    border: 2px solid #00ff41;
-    color: #00ff41;
-    font-size: 24px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn:active {
-    background: #00ff41;
-    color: #000;
+    max-width: 90vw; /* Mobile ke hisaab se width adjust */
+    max-height: 70vh;
 }

@@ -4,17 +4,20 @@ const scoreElement = document.getElementById("scoreVal");
 
 const box = 20;
 let score = 0;
-let d = ""; // Direction shuru mein khali rahegi
-
-// Snake ko bilkul beech mein rakhein
+let d = ""; 
 let snake = [{ x: 10 * box, y: 10 * box }];
-
 let food = {
     x: Math.floor(Math.random() * 18 + 1) * box,
     y: Math.floor(Math.random() * 18 + 1) * box
 };
 
-document.addEventListener("keydown", direction);
+// Arrow keys se screen scroll rokne ke liye fix
+document.addEventListener("keydown", function(e) {
+    if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+    direction(e);
+});
 
 function direction(event) {
     if (event.keyCode === 37 && d !== "RIGHT") d = "LEFT";
@@ -42,7 +45,7 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     for (let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = (i === 0) ? "#00ff41" : "#008F11";
+        ctx.fillStyle = (i === 0) ? "#39ff14" : "#1f8a0a";
         ctx.fillRect(snake[i].x, snake[i].y, box, box);
         ctx.strokeStyle = "black";
         ctx.strokeRect(snake[i].x, snake[i].y, box, box);
@@ -51,7 +54,6 @@ function draw() {
     ctx.fillStyle = "#FF3131";
     ctx.fillRect(food.x, food.y, box, box);
 
-    // Agar direction set nahi hai to snake move nahi karega
     if (d === "") return;
 
     let snakeX = snake[0].x;
@@ -75,7 +77,6 @@ function draw() {
 
     let newHead = { x: snakeX, y: snakeY };
 
-    // Boundary check aur collision check
     if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
         clearInterval(game);
         alert("Game Over! Score: " + score);
