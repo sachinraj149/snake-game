@@ -4,13 +4,11 @@ const scoreElement = document.getElementById("scoreVal");
 
 const box = 20;
 let score = 0;
-let d;
-let snake = [{ x: 9 * box, y: 10 * box }];
-let food = {
-    x: Math.floor(Math.random() * 19 + 1) * box,
-    y: Math.floor(Math.random() * 19 + 1) * box
-};
+let d = ""; // Shuruat mein direction khali rakhein
+let snake = [{ x: 10 * box, y: 10 * box }];
+let food = getRandomFood();
 
+// Keyboard Controls
 document.addEventListener("keydown", direction);
 
 function direction(event) {
@@ -20,7 +18,7 @@ function direction(event) {
     else if (event.keyCode === 40 && d !== "UP") d = "DOWN";
 }
 
-// Function for Mobile Buttons
+// Mobile Controls
 window.setDir = function(newDir) {
     if (newDir === "LEFT" && d !== "RIGHT") d = "LEFT";
     if (newDir === "UP" && d !== "DOWN") d = "UP";
@@ -28,22 +26,36 @@ window.setDir = function(newDir) {
     if (newDir === "DOWN" && d !== "UP") d = "DOWN";
 }
 
+function getRandomFood() {
+    return {
+        x: Math.floor(Math.random() * 19 + 1) * box,
+        y: Math.floor(Math.random() * 19 + 1) * box
+    };
+}
+
+function collision(head, array) {
+    for (let i = 0; i < array.length; i++) {
+        if (head.x === array[i].x && head.y === array[i].y) return true;
+    }
+    return false;
+}
+
 function draw() {
-    ctx.fillStyle = "black";
+    // Background
+    ctx.fillStyle = "#111";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Snake
     for (let i = 0; i < snake.length; i++) {
         ctx.fillStyle = (i === 0) ? "#00ff41" : "#008F11";
-        ctx.strokeStyle = "black";
+        ctx.strokeStyle = "#000";
         ctx.fillRect(snake[i].x, snake[i].y, box, box);
         ctx.strokeRect(snake[i].x, snake[i].y, box, box);
     }
 
-    ctx.fillStyle = "#FF3131"; // Neon Red for food
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = "#FF3131";
+    // Food
+    ctx.fillStyle = "#FF3131";
     ctx.fillRect(food.x, food.y, box, box);
-    ctx.shadowBlur = 0; // Reset shadow
 
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
@@ -53,33 +65,28 @@ function draw() {
     if (d === "RIGHT") snakeX += box;
     if (d === "DOWN") snakeY += box;
 
+    // Snake eats food
     if (snakeX === food.x && snakeY === food.y) {
         score++;
-        scoreElement.innerHTML = score;
-        food = {
-            x: Math.floor(Math.random() * 19 + 1) * box,
-            y: Math.floor(Math.random() * 19 + 1) * box
-        };
+        scoreElement.innerText = score; // Yahan score update ho raha hai
+        food = getRandomFood();
     } else {
-        snake.pop();
+        if(d !== "") snake.pop(); // Sirf tabhi move karein jab direction set ho
     }
 
     let newHead = { x: snakeX, y: snakeY };
 
+    // Game Over Conditions
     if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
         clearInterval(game);
-        alert("Game Over! Your Score: " + score);
-        location.reload(); // Restart game
+        ctx.fillStyle = "white";
+        ctx.font = "40px Courier New";
+        ctx.fillText("GAME OVER", 100, 200);
+        setTimeout(() => { location.reload(); }, 2000); // 2 second baad restart
+        return;
     }
 
-    snake.unshift(newHead);
-}
-
-function collision(head, array) {
-    for (let i = 0; i < array.length; i++) {
-        if (head.x === array[i].x && head.y === array[i].y) return true;
-    }
-    return false;
+    if(d !== "") snake.unshift(newHead);
 }
 
 let game = setInterval(draw, 120);
