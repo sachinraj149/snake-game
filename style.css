@@ -1,24 +1,64 @@
 body {
-    background-color: #222;
-    color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
+    background-color: #1a1a1a;
+    color: #00ff41; /* Matrix green color */
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 h1 {
-    margin-top: 20px;
+    text-shadow: 0 0 10px #00ff41;
+    letter-spacing: 5px;
 }
 
 .game-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
+    position: relative;
+    border: 5px solid #333;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 canvas {
-    background-color: #111;
-    border: 2px solid #0f0;
+    background-color: #000;
+    display: block;
+}
+
+.stats {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Mobile Controls Styling */
+.controls {
+    display: grid;
+    grid-template-areas: 
+        ". up ."
+        "left . right"
+        ". down .";
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    width: 60px;
+    height: 60px;
+    background: #333;
+    border: 2px solid #00ff41;
+    color: #00ff41;
+    font-size: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn:active {
+    background: #00ff41;
+    color: #000;
 }

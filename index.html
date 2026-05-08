@@ -7,11 +7,20 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1>🐍 Snake Game</h1>
+   <body>
+    <h1>SNAKE XENZIA</h1>
+    <div class="stats">Score: <span id="scoreVal">0</span></div>
+    
     <div class="game-container">
         <canvas id="gameCanvas" width="400" height="400"></canvas>
     </div>
-    <p>Use arrow keys to move. Eat the food to grow!</p>
+
+    <div class="controls">
+        <button class="btn" style="grid-area: up" onclick="setDir('UP')">↑</button>
+        <button class="btn" style="grid-area: left" onclick="setDir('LEFT')">←</button>
+        <button class="btn" style="grid-area: right" onclick="setDir('RIGHT')">→</button>
+        <button class="btn" style="grid-area: down" onclick="setDir('DOWN')">↓</button>
+    </div>
 
     <script src="script.js"></script>
 </body>
