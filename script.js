@@ -4,9 +4,9 @@ const scoreElement = document.getElementById("scoreVal");
 
 const box = 20;
 let score = 0;
-let d = ""; 
+let d = ""; // Direction shuru mein khali rahegi
 
-// Snake ko beech mein spawn karein (Fix)
+// Snake ko bilkul beech mein rakhein
 let snake = [{ x: 10 * box, y: 10 * box }];
 
 let food = {
@@ -51,6 +51,9 @@ function draw() {
     ctx.fillStyle = "#FF3131";
     ctx.fillRect(food.x, food.y, box, box);
 
+    // Agar direction set nahi hai to snake move nahi karega
+    if (d === "") return;
+
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
 
@@ -59,30 +62,28 @@ function draw() {
     if (d === "RIGHT") snakeX += box;
     if (d === "DOWN") snakeY += box;
 
-    // Score logic
     if (snakeX === food.x && snakeY === food.y) {
         score++;
-        if(scoreElement) scoreElement.innerText = score;
+        scoreElement.innerText = score;
         food = {
             x: Math.floor(Math.random() * 18 + 1) * box,
             y: Math.floor(Math.random() * 18 + 1) * box
         };
     } else {
-        if(d !== "") snake.pop();
+        snake.pop();
     }
 
     let newHead = { x: snakeX, y: snakeY };
 
-    // Strict Collision Check (Boundary Fix)
-    if (d !== "") {
-        if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
-            clearInterval(game);
-            alert("Game Over! Score: " + score);
-            location.reload();
-            return;
-        }
-        snake.unshift(newHead);
+    // Boundary check aur collision check
+    if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
+        clearInterval(game);
+        alert("Game Over! Score: " + score);
+        location.reload();
+        return;
     }
+
+    snake.unshift(newHead);
 }
 
-let game = setInterval(draw, 150); // Speed thodi kam ki hai (Easy mode)
+let game = setInterval(draw, 150);
