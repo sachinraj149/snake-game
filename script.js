@@ -5,10 +5,13 @@ const scoreElement = document.getElementById("scoreVal");
 const box = 20;
 let score = 0;
 let d = ""; 
+
+// Snake ko beech mein spawn karein (Fix)
 let snake = [{ x: 10 * box, y: 10 * box }];
+
 let food = {
-    x: Math.floor(Math.random() * 19 + 1) * box,
-    y: Math.floor(Math.random() * 19 + 1) * box
+    x: Math.floor(Math.random() * 18 + 1) * box,
+    y: Math.floor(Math.random() * 18 + 1) * box
 };
 
 document.addEventListener("keydown", direction);
@@ -27,8 +30,15 @@ window.setDir = function(newDir) {
     if (newDir === "DOWN" && d !== "UP") d = "DOWN";
 }
 
+function collision(head, array) {
+    for (let i = 0; i < array.length; i++) {
+        if (head.x === array[i].x && head.y === array[i].y) return true;
+    }
+    return false;
+}
+
 function draw() {
-    ctx.fillStyle = "#111";
+    ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     for (let i = 0; i < snake.length; i++) {
@@ -49,13 +59,13 @@ function draw() {
     if (d === "RIGHT") snakeX += box;
     if (d === "DOWN") snakeY += box;
 
-    // Score Logic Fix
+    // Score logic
     if (snakeX === food.x && snakeY === food.y) {
         score++;
-        if(scoreElement) scoreElement.innerText = score; 
+        if(scoreElement) scoreElement.innerText = score;
         food = {
-            x: Math.floor(Math.random() * 19 + 1) * box,
-            y: Math.floor(Math.random() * 19 + 1) * box
+            x: Math.floor(Math.random() * 18 + 1) * box,
+            y: Math.floor(Math.random() * 18 + 1) * box
         };
     } else {
         if(d !== "") snake.pop();
@@ -63,20 +73,16 @@ function draw() {
 
     let newHead = { x: snakeX, y: snakeY };
 
-    if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
-        clearInterval(game);
-        alert("Game Over! Score: " + score);
-        location.reload(); 
+    // Strict Collision Check (Boundary Fix)
+    if (d !== "") {
+        if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
+            clearInterval(game);
+            alert("Game Over! Score: " + score);
+            location.reload();
+            return;
+        }
+        snake.unshift(newHead);
     }
-
-    if(d !== "") snake.unshift(newHead);
 }
 
-function collision(head, array) {
-    for (let i = 0; i < array.length; i++) {
-        if (head.x === array[i].x && head.y === array[i].y) return true;
-    }
-    return false;
-}
-
-let game = setInterval(draw, 120);
+let game = setInterval(draw, 150); // Speed thodi kam ki hai (Easy mode)
