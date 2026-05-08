@@ -49,10 +49,10 @@ function draw() {
     if (d === "RIGHT") snakeX += box;
     if (d === "DOWN") snakeY += box;
 
-    // Score update logic
+    // Fix: Strict equality check and direct score update
     if (snakeX === food.x && snakeY === food.y) {
         score++;
-        scoreElement.innerHTML = score; // Display update
+        scoreElement.textContent = score; 
         food = {
             x: Math.floor(Math.random() * 19 + 1) * box,
             y: Math.floor(Math.random() * 19 + 1) * box
@@ -65,8 +65,8 @@ function draw() {
 
     if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
         clearInterval(game);
-        alert("Game Over! Score: " + score);
-        location.reload();
+        alert("Game Over! Your Score: " + score);
+        location.reload(); 
     }
 
     if(d !== "") snake.unshift(newHead);
